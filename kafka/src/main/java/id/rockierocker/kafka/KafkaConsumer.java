@@ -21,15 +21,15 @@ public class KafkaConsumer {
         this.brokerAddress = brokerAddress;
     }
 
-    public void start(Function<String, Object> function, KafkaConsumerSettingsBean settings, String topic) {
-    		org.apache.kafka.clients.consumer.KafkaConsumer<String, String> kafkaConsumer = getConsumer(settings, topic);
+    public void start(Function<ConsumerRecord<String, String>, Object> function, KafkaConsumerSettingsBean settings, String topic) {
+		org.apache.kafka.clients.consumer.KafkaConsumer<String, String> kafkaConsumer = getConsumer(settings, topic);
         kafkaConsumer.subscribe(Arrays.asList(topic));
 		while (true) {
 			ConsumerRecords<String, String> consumerRecords = kafkaConsumer.poll(Duration.ofMillis(100));
 			for (ConsumerRecord<String, String> consumerRecord : consumerRecords) {
 				System.out.println("Partition: " + consumerRecord.partition() + ", Offset: " + consumerRecord.offset()
 						+ ", Key: " + consumerRecord.key() + ", Value: " + consumerRecord.value());
-
+				function.apply(consumerRecord);
 			}
 			kafkaConsumer.commitSync();
 		}
