@@ -1,0 +1,4 @@
+id\rockierocker\kafka\KafkaConsumerSettingsBean.class
+id\rockierocker\kafka\KafkaProducer.class
+id\rockierocker\kafka\KafkaConsumer.class
+id\rockierocker\kafka\ExampleMain.class
